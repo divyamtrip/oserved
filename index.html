@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by TEMPLATED
+http://templated.co
+Released for free under the Creative Commons Attribution License
+
+Name       : 0served
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20130405
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>0served</title>
+<link href='https://fonts.googleapis.com/css?family=Archivo+Narrow:400,700|Open+Sans:400,300' rel='stylesheet' type='text/css' />
+<link href="style.css" rel="stylesheet" type="text/css" media="screen" />
+<link rel="icon" type="image/png" href="favicon.png" />
+</head>
+<body>
+<div id="wrapper">
+	<div id="header-wrapper">
+		<div id="header" class="container">
+			<div id="logo">
+				<h1><a href="index.html">0served </a></h1>
+			</div>
+			<div id="menu">
+				<ul>
+					<li class="current_page_item"><a href="index.html">Home</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="archive.html">Archive</a></li>
+                    <li><a href="about.html">About</a></li>
+				</ul>
+			</div>
+		</div>
+		<div id="banner">
+			<div class="content"><img src="images/img02.jpg" width="1200" height="300" alt="" /></div>
+		</div>
+	</div>
+	<!-- end #header -->
+	
+	<div id="page">
+		<div id="content">
+			<div class="post">
+				<h2 class="title"><a href="#">Introduction</a></h2>
+				<p class="meta"><span class="date">Independent Research Publication</span></p>
+				<div style="clear: both;">&nbsp;</div>
+				<div class="entry">
+					<p>
+0served is an independent research publication focused on
+markets, businesses, technology, economics, and the incentives
+that shape them.
+</p>
+<p>
+We investigate narratives, follow capital flows, examine
+institutions, and publish long-form research.
+</p>
+<p>
+Research reports, essays, and field notes will be published here.
+</p>
+				</div>
+			</div>
+			
+			<h2 style="font-size: 2.2em; padding-top: 10px; margin-bottom: 25px; font-family: 'Archivo Narrow', sans-serif; text-transform: uppercase;">Latest Research</h2>
+			<div id="latest-posts"></div>
+		</div>
+		<!-- end #content -->
+		<div id="sidebar">
+			<h2>Recent Research</h2>
+			<ul class="list-style1" id="recent-posts-list">
+				<li>Loading...</li>
+			</ul>
+		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	<!-- end #page --> 
+</div>
+<div id="footer">
+	<p>&copy; 2026 0served. Template adapted from TEMPLATED.</p>
+</div>
+<!-- end #footer -->
+
+<script type="text/javascript">
+//<![CDATA[
+document.addEventListener("DOMContentLoaded", () => {
+    fetch('posts.json')
+        .then(response => {
+            if (!response.ok) throw new Error("Could not fetch posts");
+            return response.json();
+        })
+        .then(posts => {
+            // Render latest 3 posts
+            const latestPostsEl = document.getElementById('latest-posts');
+            latestPostsEl.innerHTML = '';
+            
+            const published = posts.filter(p => !p.isForthcoming).slice(0, 3);
+            
+            if (published.length === 0) {
+                latestPostsEl.innerHTML = '<p>No publications available yet.</p>';
+            } else {
+                published.forEach(post => {
+                    const postDiv = document.createElement('div');
+                    postDiv.className = 'post';
+                    
+                    postDiv.innerHTML = `
+                        <h2 class="title"><a href="post.html?id=${post.id}">${post.title}</a></h2>
+                        <p class="meta"><span class="date">${post.date}</span> &nbsp;|&nbsp; <span>${post.category}</span></p>
+                        <div style="clear: both;">&nbsp;</div>
+                        <div class="entry">
+                            <p>${post.summary}</p>
+                            <a href="post.html?id=${post.id}" class="more">Read More</a>
+                        </div>
+                    `;
+                    latestPostsEl.appendChild(postDiv);
+                });
+            }
+
+            // Load sidebar widget
+            const sidebarList = document.getElementById('recent-posts-list');
+            sidebarList.innerHTML = '';
+            
+            posts.slice(0, 6).forEach(p => {
+                const li = document.createElement('li');
+                li.style.borderBottom = '1px solid #E7EBED';
+                li.style.padding = '8px 0';
+                
+                const link = document.createElement('a');
+                link.href = `post.html?id=${p.id}`;
+                link.textContent = p.title;
+                link.style.textDecoration = 'none';
+                link.style.color = '#5E5E5E';
+                link.style.fontWeight = '400';
+                
+                const meta = document.createElement('span');
+                meta.style.display = 'block';
+                meta.style.fontSize = '11px';
+                meta.style.color = '#8E8E8E';
+                meta.style.fontStyle = 'italic';
+                meta.textContent = `${p.category} — ${p.date}`;
+
+                li.appendChild(link);
+                li.appendChild(meta);
+                sidebarList.appendChild(li);
+            });
+        })
+        .catch(err => {
+            console.error('Error loading posts:', err);
+            document.getElementById('recent-posts-list').innerHTML = '<li>Error loading posts</li>';
+        });
+});
+//]]>
+</script>
+</body>
+</html>
